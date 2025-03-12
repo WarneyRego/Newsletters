@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Cores de fundo */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    
+    /* Cores para componentes */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    
+    /* Cores primárias */
+    --primary: 199 89% 48%;
+    --primary-foreground: 210 40% 98%;
+    
+    /* Cores secundárias */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    /* Cores de destaque */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
+    /* Cores de borda */
+    --border: 214.3 31.8% 91.4%;
+    
+    /* Cores de entrada */
+    --input: 214.3 31.8% 91.4%;
+    
+    /* Cores de toast */
+    --toast-bg: #ffffff;
+    --toast-color: #111827;
+    --toast-border: rgba(0, 0, 0, 0.05);
+    
+    /* Cores de anel */
+    --ring: 199 89% 48%;
+  }
+  
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .font-newspaper {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Transição suave para mudanças de tema */
+  * {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+}
+
+/* Classes utilitárias para tema */
+@layer utilities {
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+  
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+  
+  .border-primary {
+    border-color: hsl(var(--primary));
+  }
+}
