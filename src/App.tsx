@@ -121,7 +121,12 @@ function App() {
     setSelectedNewsletter(newsletter);
   };
 
-  
+  useEffect(() => {
+    console.log(`Modo admin ${isAdminMode ? 'ativado' : 'desativado'}, atualizando lista...`);
+    console.log(`Estado de autenticação: ${isLoggedIn ? 'logado' : 'não logado'}`);
+    console.log(`Botão de criação de admin deve aparecer: ${(isLoggedIn && isAdminMode) ? 'sim' : 'não'}`);
+    loadNewsletters();
+  }, [isAdminMode, isLoggedIn]);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -170,7 +175,6 @@ function App() {
         }}
       />
       
-      {/* Navbar */}
       <Navbar 
         onLoginClick={() => setIsLoginModalOpen(true)} 
         onLogoutClick={handleLogout}
@@ -178,30 +182,9 @@ function App() {
         onAdminModeToggle={toggleAdminMode}
       />
       
-      {/* Banner de modo admin */}
-      {isAdminMode && (
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white text-center py-3 px-4 shadow-md">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <p className="font-medium">Modo Administrador</p>
-            {isLoggedIn && (
-              <motion.button
-                onClick={() => setIsAdminCreatorModalOpen(true)}
-                className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white shadow-sm"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <UserPlus className="w-4 h-4" />
-                <span className="font-medium text-sm">Criar Admin</span>
-              </motion.button>
-            )}
-          </div>
-        </div>
-      )}
-      
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         {selectedNewsletter && (
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <motion.button
               onClick={() => setSelectedNewsletter(null)}
               className="flex items-center text-gray-600 hover:text-primary-600 transition-colors"
@@ -209,7 +192,7 @@ function App() {
               whileTap={{ scale: 0.95 }}
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              <span className="font-medium">Voltar para todas as notícias</span>
+              <span className="font-medium">Voltar</span>
             </motion.button>
           </div>
         )}
@@ -220,7 +203,7 @@ function App() {
             <p className="mt-4 text-gray-600">Carregando notícias...</p>
           </div>
         ) : selectedNewsletter ? (
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
             <div className="lg:col-span-3">
               <NewsletterDetail 
                 newsletter={selectedNewsletter} 
@@ -230,10 +213,10 @@ function App() {
                 } : undefined}
               />
             </div>
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 mt-8 lg:mt-0">
               <div className="sticky top-24">
-                <h2 className="text-xl font-bold mb-4 text-gray-900 font-newspaper">Outras Notícias</h2>
-                <div className="space-y-4">
+                <h2 className="text-xl font-bold mb-3 sm:mb-4 text-gray-900 font-newspaper">Outras Notícias</h2>
+                <div className="space-y-3 sm:space-y-4">
                   <AnimatePresence>
                     {newsletters
                       .filter((n) => n.id !== selectedNewsletter.id)
@@ -245,31 +228,33 @@ function App() {
                           className="cursor-pointer"
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
                         >
                           <motion.div 
                             className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative group card-hover"
                             whileHover={{ borderColor: 'rgba(59, 130, 246, 0.5)' }}
                           >
-                            <div className="relative overflow-hidden">
-                              <motion.img
-                                src={newsletter.image_url}
-                                alt={newsletter.title}
-                                className="w-full h-32 object-cover"
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.3 }}
-                              />
-                            </div>
-                            <div className="p-4">
-                              <h3 className="font-medium text-gray-900 line-clamp-2 font-newspaper">
-                                {newsletter.title}
-                              </h3>
-                              <p className="text-xs text-gray-500 mt-2">
-                                {new Date(newsletter.created_at).toLocaleDateString('pt-BR', {
-                                  day: 'numeric',
-                                  month: 'short'
-                                })}
-                              </p>
+                            <div className="flex items-center">
+                              <div className="relative overflow-hidden w-24 h-20 flex-shrink-0">
+                                <motion.img
+                                  src={newsletter.image_url}
+                                  alt={newsletter.title}
+                                  className="w-full h-full object-cover"
+                                  whileHover={{ scale: 1.05 }}
+                                  transition={{ duration: 0.3 }}
+                                />
+                              </div>
+                              <div className="p-3">
+                                <h3 className="font-medium text-sm text-gray-900 line-clamp-2 font-newspaper">
+                                  {newsletter.title}
+                                </h3>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {new Date(newsletter.created_at).toLocaleDateString('pt-BR', {
+                                    day: 'numeric',
+                                    month: 'short'
+                                  })}
+                                </p>
+                              </div>
                             </div>
                           </motion.div>
                         </motion.div>
@@ -281,45 +266,53 @@ function App() {
           </div>
         ) : (
           <>
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 font-newspaper">Notícias Recentes</h2>
-                <p className="text-gray-600 mt-1">Fique por dentro das últimas atualizações</p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-newspaper">Notícias Recentes</h2>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">Fique por dentro das últimas atualizações</p>
               </div>
-              <motion.button
-                onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2.5 rounded-lg transition-colors shadow-md"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Plus className="w-5 h-5" />
-                <span>Nova Notícia</span>
-              </motion.button>
-            </div>
-
-            {newsletters.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-xl shadow-md border border-gray-100">
-                <h3 className="text-xl font-medium text-gray-900 mb-2 font-newspaper">Nenhuma notícia encontrada</h3>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">Clique no botão acima para adicionar sua primeira notícia e começar a compartilhar conteúdo.</p>
+              {isLoggedIn && isAdminMode && (
                 <motion.button
                   onClick={() => setIsModalOpen(true)}
-                  className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg inline-flex items-center space-x-2 shadow-md"
+                  className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2.5 rounded-lg transition-colors shadow-md self-start"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Plus className="w-5 h-5" />
-                  <span>Criar Primeira Notícia</span>
+                  <span>Nova Notícia</span>
                 </motion.button>
+              )}
+            </div>
+
+            {newsletters.length === 0 ? (
+              <div className="text-center py-12 sm:py-16 bg-white rounded-xl shadow-md border border-gray-100">
+                <h3 className="text-xl font-medium text-gray-900 mb-2 font-newspaper">Nenhuma notícia encontrada</h3>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto px-4">
+                  {isLoggedIn && isAdminMode 
+                    ? "Clique no botão acima para adicionar sua primeira notícia e começar a compartilhar conteúdo."
+                    : "Não há notícias disponíveis no momento."}
+                </p>
+                {isLoggedIn && isAdminMode && (
+                  <motion.button
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg inline-flex items-center space-x-2 shadow-md"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span>Criar Primeira Notícia</span>
+                  </motion.button>
+                )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <AnimatePresence>
                   {newsletters.map((newsletter, index) => (
                     <motion.div
                       key={newsletter.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
                     >
                       <NewsletterCard
                         newsletter={newsletter}
@@ -371,65 +364,62 @@ function App() {
         onClose={() => setIsAdminCreatorModalOpen(false)}
       />
 
-      {/* Botão de login flutuante */}
       {!isLoggedIn && (
         <motion.button
-          onClick={openLoginModal}
-          className="fixed bottom-6 right-6 flex items-center space-x-2 px-4 py-3 rounded-full bg-primary-600 hover:bg-primary-700 text-white shadow-xl z-50"
-          whileHover={{ scale: 1.05, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+          onClick={() => setIsLoginModalOpen(true)}
+          className="fixed bottom-4 right-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg z-40 flex items-center space-x-1.5 sm:space-x-2"
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <LogIn className="w-5 h-5" />
-          <span className="font-medium">Login</span>
+          <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="font-medium text-xs sm:text-sm">Login</span>
         </motion.button>
       )}
       
-      {/* Botão para entrar no modo admin */}
       {isLoggedIn && !isAdminMode && (
         <motion.button
           onClick={toggleAdminMode}
-          className="fixed bottom-6 right-6 flex items-center space-x-2 px-4 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-xl z-50"
-          whileHover={{ scale: 1.05, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+          className="fixed bottom-4 right-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg z-40 flex items-center space-x-1.5 sm:space-x-2"
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Shield className="w-5 h-5" />
-          <span className="font-medium">Modo Admin</span>
+          <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="font-medium text-xs sm:text-sm">Modo Admin</span>
         </motion.button>
       )}
       
-      {/* Botão para sair do modo admin */}
       {isLoggedIn && isAdminMode && (
-        <div className="fixed bottom-6 right-6 flex space-x-3 z-50">
+        <div className="fixed bottom-4 right-4 flex flex-col sm:flex-row gap-2 sm:gap-3 z-40">
           <motion.button
             onClick={() => setIsAdminCreatorModalOpen(true)}
-            className="flex items-center space-x-2 px-4 py-3 rounded-full bg-green-600 hover:bg-green-700 text-white shadow-xl"
-            whileHover={{ scale: 1.05, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-full shadow-lg flex items-center space-x-1.5 sm:space-x-2"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <UserPlus className="w-5 h-5" />
-            <span className="font-medium">Criar Admin</span>
+            <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="font-medium text-xs sm:text-sm">Criar Admin</span>
           </motion.button>
           
           <motion.button
             onClick={toggleAdminMode}
-            className="flex items-center space-x-2 px-4 py-3 rounded-full bg-gray-700 hover:bg-gray-800 text-white shadow-xl"
-            whileHover={{ scale: 1.05, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full shadow-lg flex items-center space-x-1.5 sm:space-x-2"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
-            <Eye className="w-5 h-5" />
-            <span className="font-medium">Modo Normal</span>
+            <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="font-medium text-xs sm:text-sm">Modo Normal</span>
           </motion.button>
         </div>
       )}
