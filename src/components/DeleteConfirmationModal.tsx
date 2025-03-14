@@ -23,10 +23,8 @@ export function DeleteConfirmationModal({
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<any>(null);
 
-  // Verificar se o ID da notícia é válido
   useEffect(() => {
     if (isOpen && newsletterId) {
-      console.log('Modal aberto com ID da notícia:', newsletterId);
       setPermissionError(null);
       setDebugInfo(null);
     }
@@ -43,23 +41,18 @@ export function DeleteConfirmationModal({
 
     try {
       setIsProcessing(true);
-      console.log(`Excluindo newsletter com ID: ${newsletterId}`);
 
-      // Usar nossa função para excluir a newsletter
       const result = await deleteNewsletter(newsletterId);
 
       if (result.error) {
-        console.error('Falha ao excluir newsletter:', result.error);
         toast.error(`Erro ao excluir: ${result.error.message}`);
       } else {
-        console.log('Newsletter excluída com sucesso');
         toast.success('Newsletter excluída com sucesso!');
         onSuccess(newsletterId);
         setIsProcessing(false);
         onClose();
       }
     } catch (e) {
-      console.error('Exceção ao excluir newsletter:', e);
       toast.error(`Erro inesperado: ${e instanceof Error ? e.message : String(e)}`);
     } finally {
       setIsProcessing(false);

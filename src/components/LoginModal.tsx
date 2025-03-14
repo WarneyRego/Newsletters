@@ -28,20 +28,16 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
       setIsLoading(true);
       setError(null);
       
-      console.log('Tentando fazer login com:', email);
       const result = await login(email, password);
       
       if (!result.success) {
-        console.error('Falha no login:', result.error);
         setError(result.error || 'Credenciais inválidas. Por favor, tente novamente.');
         return;
       }
       
-      console.log('Login bem-sucedido');
       toast.success('Login realizado com sucesso!');
       onClose();
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
       setError('Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.');
     } finally {
       setIsLoading(false);

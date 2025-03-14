@@ -2,29 +2,24 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase
 import { app } from "./firebase";
 
 /**
- * Função para criar um usuário administrador no Firebase Authentication
  * 
- * @param name Nome do administrador
- * @param email Email do administrador
- * @param password Senha do administrador
- * @returns Objeto com resultado da operação
+ * 
+ * @param name N
+ * @param email 
+ * @param password 
+ * @returns 
  */
 export async function createAdminUser(name: string, email: string, password: string) {
   try {
-    console.log(`Criando usuário administrador: ${name} (${email})`);
     
-    // Inicializar o Auth
     const auth = getAuth(app);
     
-    // Criar o usuário com email e senha
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     
-    // Atualizar o perfil do usuário com o nome
     await updateProfile(userCredential.user, {
       displayName: name
     });
     
-    console.log('Usuário administrador criado com sucesso:', userCredential.user);
     
     return { 
       success: true, 
@@ -32,7 +27,6 @@ export async function createAdminUser(name: string, email: string, password: str
       error: null 
     };
   } catch (error) {
-    console.error('Erro ao criar usuário administrador:', error);
     return { 
       success: false, 
       user: null,

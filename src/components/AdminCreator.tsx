@@ -29,20 +29,15 @@ export function AdminCreator({ onClose }: AdminCreatorProps) {
       
       toast.loading('Criando usuário administrador...', { id: 'admin-creation' });
       
-      console.log(`Criando usuário administrador: ${name} (${email})`);
+            const auth = getAuth(app);
       
-      // Inicializar o Auth
-      const auth = getAuth(app);
-      
-      // Criar o usuário com email e senha
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      // Atualizar o perfil do usuário com o nome
       await updateProfile(userCredential.user, {
         displayName: name
       });
       
-      console.log('Usuário administrador criado com sucesso:', userCredential.user);
+    
       
       setResult({
         success: true,
@@ -51,14 +46,12 @@ export function AdminCreator({ onClose }: AdminCreatorProps) {
       
       toast.success(`Administrador ${name} criado com sucesso!`, { id: 'admin-creation' });
       
-      // Limpar os campos após o sucesso
       if (onClose) {
         setTimeout(() => {
           onClose();
         }, 3000);
       }
     } catch (error) {
-      console.error('Erro ao criar usuário administrador:', error);
       
       setResult({
         success: false,
