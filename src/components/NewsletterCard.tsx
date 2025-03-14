@@ -63,7 +63,7 @@ export function NewsletterCard({ newsletter, onClick, onDeleteClick, isAdminMode
         {onDeleteClick && isAdminMode && (
           <motion.button
             onClick={onDeleteClick}
-            className="p-1.5 sm:p-2 bg-red-600 hover:bg-red-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+            className="p-1.5 sm:p-2 bg-red-600 hover:bg-red-700 text-white rounded-full md:opacity-0 opacity-100 md:group-hover:opacity-100 transition-all duration-200 shadow-lg"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label="Excluir notícia"
@@ -74,7 +74,7 @@ export function NewsletterCard({ newsletter, onClick, onDeleteClick, isAdminMode
         
         <motion.button
           onClick={handleShare}
-          className="p-1.5 sm:p-2 bg-gray-700 hover:bg-gray-800 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+          className="p-1.5 sm:p-2 bg-gray-700 hover:bg-gray-800 text-white rounded-full md:opacity-0 opacity-100 md:group-hover:opacity-100 transition-all duration-200 shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           aria-label="Compartilhar notícia"
@@ -121,31 +121,6 @@ export function NewsletterCard({ newsletter, onClick, onDeleteClick, isAdminMode
             <span>Ler mais</span>
             <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1" />
           </motion.div>
-        </div>
-      </div>
-      
-      {/* Botões de ação para dispositivos móveis - visíveis por padrão */}
-      <div className="md:hidden absolute bottom-0 left-0 right-0 flex justify-end p-2 bg-gradient-to-t from-black/40 to-transparent">
-        <div className="flex space-x-1.5">
-          {onDeleteClick && isAdminMode && (
-            <motion.button
-              onClick={onDeleteClick}
-              className="p-1.5 bg-red-600 text-white rounded-full shadow-lg"
-              whileTap={{ scale: 0.9 }}
-              aria-label="Excluir notícia"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </motion.button>
-          )}
-          
-          <motion.button
-            onClick={handleShare}
-            className="p-1.5 bg-gray-700 text-white rounded-full shadow-lg"
-            whileTap={{ scale: 0.9 }}
-            aria-label="Compartilhar notícia"
-          >
-            <Share2 className="w-3.5 h-3.5" />
-          </motion.button>
         </div>
       </div>
     </motion.article>
